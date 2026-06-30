@@ -1,12 +1,26 @@
 bundle:
   name: sales-etl
+variables:
+  catalog:
+    description: Catalog name
 
+  schema:
+    description: Schema name
 targets:
   dev:
     mode: development
     workspace:
       host: https://dbc-9bf6e413-0140.cloud.databricks.com
-
+    variables:
+      catalog: dev_catalog
+      schema: dev_schema
+  stage:
+    mode: staging
+    workspace:
+      host: https://dbc-9bf6e413-0140.cloud.databricks.com
+    variables:
+        catalog: stage_catalog
+        schema: stage_schema
 workspace:
   root_path: /Workspace/Users/${workspace.current_user.userName}/.bundle/${bundle.name}
 

@@ -6,6 +6,11 @@ resources:
         - task_key: Test_Task
           spark_python_task:
             python_file: Abh_test.py
+            parameters:
+              - "--catalog"
+              - "${var.catalog}"
+              - "--schema"
+              - "${var.schema}"
             source: GIT
           environment_key: Default
       git_source:
