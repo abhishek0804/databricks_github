@@ -1,12 +1,29 @@
 bundle:
   name: sales-etl
-
+variables:
+  catalog:
+    description: Catalog name
+  git_branch:
+    description: Git branch to use
+  schema:
+    description: Schema name
 targets:
   dev:
     mode: development
     workspace:
       host: https://dbc-9bf6e413-0140.cloud.databricks.com
-
+    variables:
+      catalog: dev_catalog
+      schema: dev_schema
+      git_branch: dev
+  stage:
+    mode: staging
+    workspace:
+      host: https://dbc-9bf6e413-0140.cloud.databricks.com
+    variables:
+        catalog: stage_catalog
+        schema: stage_schema
+        git_branch: stage
 workspace:
   root_path: /Workspace/Users/${workspace.current_user.userName}/.bundle/${bundle.name}
 
