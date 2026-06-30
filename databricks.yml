@@ -17,7 +17,7 @@ targets:
       schema: dev_schema
       git_branch: dev
   stage:
-    mode: staging
+    mode: production
     workspace:
       host: https://dbc-9bf6e413-0140.cloud.databricks.com
     variables:
