@@ -3,7 +3,7 @@ resources:
     Test_Job:
       name: Test Job
       tasks:
-        - task_key: Test_Task
+        - task_key: Test_Task_${var.git_branch}
           spark_python_task:
             python_file: Abh_test.py
             parameters:
