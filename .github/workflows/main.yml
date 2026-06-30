@@ -3,23 +3,41 @@ name: Deploy Databricks Bundle
 on:
   push:
     branches:
-      - main
+      - dev
+      - stage
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-      - uses: databricks/setup-cli@main
+      - name: Install Databricks CLI
+        uses: databricks/setup-cli@main
 
-      - run: databricks bundle validate -t dev
+      - name: Set deployment target
+        id: target
+        run: |
+          if [ "${GITHUB_REF_NAME}" = "dev" ]; then
+            echo "TARGET=dev" >> $GITHUB_ENV
+            echo "HOST=${{ secrets.DATABRICKS_HOST }}" >> $GITHUB_ENV
+            echo "TOKEN=${{ secrets.DATABRICKS_TOKEN }}" >> $GITHUB_ENV
+          elif [ "${GITHUB_REF_NAME}" = "stage" ]; then
+            echo "TARGET=stage" >> $GITHUB_ENV
+            echo "HOST=${{ secrets.DATABRICKS_HOST }}" >> $GITHUB_ENV
+            echo "TOKEN=${{ secrets.DATABRICKS_TOKEN }}" >> $GITHUB_ENV
+          fi
+
+      - name: Validate bundle
+        run: databricks bundle validate -t $TARGET
         env:
-          DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST }}
-          DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN }}
+          DATABRICKS_HOST: ${{ env.HOST }}
+          DATABRICKS_TOKEN: ${{ env.TOKEN }}
 
-      - run: databricks bundle deploy -t dev
+      - name: Deploy bundle
+        run: databricks bundle deploy -t $TARGET
         env:
-          DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST }}
-          DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN }}
+          DATABRICKS_HOST: ${{ env.HOST }}
+          DATABRICKS_TOKEN: ${{ env.TOKEN }}
