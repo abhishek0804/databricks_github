@@ -20,10 +20,12 @@ targets:
     mode: production
     workspace:
       host: https://dbc-9bf6e413-0140.cloud.databricks.com
+      root_path: /Shared/.bundle/${bundle.name}/${bundle.target}
     variables:
         catalog: stage_catalog
         schema: stage_schema
         git_branch: stage
+    
 workspace:
   root_path: /Workspace/Users/${workspace.current_user.userName}/.bundle/${bundle.name}
 
